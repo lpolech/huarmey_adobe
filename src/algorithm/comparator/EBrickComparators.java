@@ -1,0 +1,6 @@
+package algorithm.comparator;
+
+public enum EBrickComparators {
+    COUNTING_WITH_THRESHOLD_EXPANDED_UNCERTAINTY,
+    COUNTING_WITH_THRESHOLD_SIMPLE_AVG_COMPARISION
+}
