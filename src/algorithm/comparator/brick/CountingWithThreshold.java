@@ -12,10 +12,11 @@ public class CountingWithThreshold implements BrickComparator{
     private double measurementsAccuracy;
     private double percentagePossibleBrickShrink;
     
-    public CountingWithThreshold(double measurementsAccuracy, double percentageBrickMinShrink, double percentageBrickMaxShrink) {
+    public CountingWithThreshold(double measurementsAccuracy, double percentageBrickMinShrink,
+                                 double percentageBrickMaxShrink) {
         this.measurementsAccuracy = measurementsAccuracy;
-        this.percentagePossibleBrickShrink = percentageBrickMaxShrink-percentageBrickMinShrink;//zakladam, ze kazdy pomiar jest juz po tym minimalnym skurczu
-        //i potrzebuje tylko miec mozliwe rozszerzenie tego zkurczu
+        this.percentagePossibleBrickShrink = percentageBrickMaxShrink-percentageBrickMinShrink;//zakladam, ze kazdy
+        // pomiar jest juz po tym minimalnym skurczu i potrzebuje tylko miec mozliwe rozszerzenie tego zkurczu
     }
     
     @Override
@@ -58,7 +59,8 @@ public class CountingWithThreshold implements BrickComparator{
             }
         }
         
-        return score/3.0;//normalizacja, co prawda ta sama cegla z sama soba nie zawsze bedzie miala wartosci 1 (gdy np. nie wszystkie wymiary beda)
+        return score/3.0;//normalizacja, co prawda ta sama cegla z sama soba nie zawsze bedzie miala wartosci 1
+        // (gdy np. nie wszystkie wymiary beda)
     }
 
     private boolean measurementsAreEqual(double i1Measure, double i2Measure,
@@ -77,8 +79,10 @@ public class CountingWithThreshold implements BrickComparator{
         }
         else if(Parameters.getBrickComparator() == EBrickComparators.COUNTING_WITH_THRESHOLD_SIMPLE_AVG_COMPARISION)
         {
-            double measureAvg = (i1Measure + i2Measure)/2.0;//zakladam, ze obie cegly sa z tej samej formy, biorac ich usrednuiona dlugosc do tego, aby obliczyc mozliwy skurcz
-            //double measureAvg = Math.max(i1Measure + i2Measure);//podejscie ktore bedzie najwiecej akceptowac. Zaklada ono, ze dluzsza segla NIE ULEGLA skurczeniu i pacza sie, czy ktorsza zawiera sie w przedziale
+            double measureAvg = (i1Measure + i2Measure)/2.0;//zakladam, ze obie cegly sa z tej samej formy, biorac ich
+            // usrednuiona dlugosc do tego, aby obliczyc mozliwy skurcz
+            //double measureAvg = Math.max(i1Measure + i2Measure);//podejscie ktore bedzie najwiecej akceptowac.
+            // Zaklada ono, ze dluzsza cegla NIE ULEGLA skurczeniu i pacza sie, czy ktorsza zawiera sie w przedziale
             double acceptanceThreshold = measurementsAccuracy + (measureAvg*percentagePossibleBrickShrink);
             return measureDifference <= acceptanceThreshold + COMPARISION_EPSYLON;//uwzgledniony skurcz
         }

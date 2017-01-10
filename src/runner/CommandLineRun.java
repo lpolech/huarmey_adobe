@@ -3,7 +3,6 @@ package runner;
 import java.io.File;
 
 import common.CmdLineParser;
-import weka.attributeSelection.BestFirst;
 import weka.core.Instances;
 import algorithm.BrickRanking;
 import algorithm.WallRanking;
@@ -23,31 +22,36 @@ public class CommandLineRun {
     public static void main(String[] args) 
     {
         long startTime = System.currentTimeMillis();
-        //TODO: mo�na by w porownywaniu scian DOBIERAC odpowiednie ecgly do siebie, np. odejmowac od siebie wymiary, nastepnie wybrac ta pare cegiel, ktora ma najmniejsza roznice
-        //(nie wiem jeszcze jak rozkminic, jezeli jedna cegla ma 3 wymiary, a druga ma tylko 2, moze zwiekszyc o 1/3 obliczonej roznicy?), w ten sposob dobrac NAJBLIZSZE sobie cegly
-        //i ich roznice uzyc do oceny podobienstwa danych scian. W ten sposob mozna za pomoca roznic miedzy najblizszymi ceglami obliczyc podobienstwo miedzy scianami.
-        //jezeli brakuje jakiegos wymiaru, to mozna go aproksymowac za pomoca sredniej danego wymiaru danej sciany, albo srednia z danych, albo KNN znalezc najblizsza cegle na podstawie
-        //istniejacych wymiarow, 
+        // TODO: mozna by w porownywaniu scian DOBIERAC odpowiednie cegly do siebie, np. odejmowac od siebie wymiary,
+        // nastepnie wybrac ta pare cegiel, ktora ma najmniejsza roznice (nie wiem jeszcze jak rozkminic, jezeli jedna
+        // cegla ma 3 wymiary, a druga ma tylko 2, moze zwiekszyc o 1/3 obliczonej roznicy? Albo obliczyc podobinestwo
+        // jedynie na podstawie tych wymiarow, ktore sa obecne), w ten sposob dobrac NAJBLIZSZE sobie cegly (NAJBLIZSZY
+        // WZAJEMNY SASIAD) i ich roznice uzyc do oceny podobienstwa danych scian. W ten sposob mozna za pomoca roznic
+        // miedzy najblizszymi ceglami obliczyc podobienstwo miedzy scianami. Jezeli brakuje jakiegos wymiaru, to mozna
+        // go aproksymowac za pomoca sredniej danego wymiaru danej sciany, albo srednia z danych, albo KNN znalezc
+        // najblizsza cegle na podstawie istniejacych wymiarow,
         
-        //obecne podjscie do podobienstwa scian rozwaza kazde paqry cegiel, dzieki czemu na pewno nic nie pominiemy, wada jest to, ze jezeli w scianie jest duzo form o rozniacych sie wartosciach,
-        //to ta miara bedzie obnizala podobienstwo takiej sciany..,.
+        // obecne podjscie do podobienstwa scian rozwaza kazde pary cegiel, dzieki czemu na pewno nic nie pominiemy,
+        // wada jest to, ze jezeli w scianie jest duzo form o rozniacych sie wartosciach, to ta miara bedzie obnizala
+        // podobienstwo takiej sciany...
         
         //mozna na podstawie distance matrix wykorzystac jakies metody klasteryzacji
-//      args = new String[]{
-//              "-i",
-//              "adobe-data-02-07.arff",
-//              "-o",
-//              "MAMAbpmwr",
-//              "-cwtsac",
+        args = new String[]{
+                "-i",
+                "adobe-data-07_01.arff",
+                "-o",
+                "adobe-data-07_01_avg_similarities_counting_a1",
+                "-cwtsac",
 //              "-bpmwr",
-//              "-v",
-//              "-a",
-//              "0.5",
-//              "-s1",
-//              "0.02",
-//              "-s2",
-//              "0.1"
-//      };
+                "-asc",
+                "-v",
+                "-a",
+                "1.0",
+                "-s1",
+                "0.0",
+                "-s2",
+                "0.0"
+        };
         
         CmdLineParser parser = new CmdLineParser();
         parser.parse(args);
@@ -64,7 +68,7 @@ public class CommandLineRun {
         if(Parameters.isVerbose())
         {
             System.out.print("Done.\n");
-            System.out.print("Computing brick ranking... ");
+            System.out.print("Computing brick distance matrix... ");
         }
         
         BrickComparator brickComparator = null;
@@ -74,20 +78,22 @@ public class CommandLineRun {
             brickComparator = new CountingWithThreshold(Parameters.getMeasurementsAccuracy(), 
                     Parameters.getPercentageMinBrickShrink(), Parameters.getPercentageMaxBrickShrink());
         }
-        DistanceMatrix bricksRanking = BrickRanking.computeFullRanking(brickComparator, bricks, Parameters.getOutputFolder() + File.separator + "brickRanking.csv");
+        DistanceMatrix bricksRanking = BrickRanking.computeDistanceMatrix(brickComparator, bricks,
+                Parameters.getOutputFolder() + File.separator + "brickRanking.csv");
         
         if(Parameters.isVerbose())
         {
             System.out.print("Done.\n");
-            System.out.print("Computing each brick ranking...");
+            System.out.print("Parsing and saving each brick ranking...");
         }
         
-        BrickRanking.computeEachElementRanking(bricksRanking, Parameters.getOutputFolder() + File.separator + "eachBrickRanking.csv");
+        BrickRanking.parseAndSaveEachElementRanking(bricksRanking, Parameters.getOutputFolder() + File.separator
+                + "eachBrickRanking.csv");
         
         if(Parameters.isVerbose())
         {
             System.out.print("Done.\n");
-            System.out.print("Computing wall ranking... ");
+            System.out.print("Computing wall distance matrix... ");
         }
         
         WallComparator wallComparator = null;
@@ -99,15 +105,17 @@ public class CommandLineRun {
         {
             wallComparator = new BrickPairMatchingWithoutReturn();
         }
-        DistanceMatrix wallsRanking = WallRanking.computeFullRanking(wallComparator, bricksRanking, bricks, Parameters.getOutputFolder() + File.separator + "wallRanking.csv");
+        DistanceMatrix wallsRanking = WallRanking.computeFullRanking(wallComparator, bricksRanking, bricks,
+                Parameters.getOutputFolder() + File.separator + "wallRanking.csv");
         
         if(Parameters.isVerbose())
         {
             System.out.print("Done.\n");
-            System.out.print("Computing each wall ranking...");
+            System.out.print("Parsing and saving each wall ranking...");
         }
         
-        WallRanking.computeEachElementRanking(wallsRanking, Parameters.getOutputFolder() + File.separator + "eachWallRanking.csv");
+        WallRanking.parseAndSaveEachElementRanking(wallsRanking, Parameters.getOutputFolder() + File.separator
+                + "eachWallRanking.csv");
         
         if(Parameters.isVerbose())
         {   

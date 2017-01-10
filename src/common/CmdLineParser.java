@@ -79,15 +79,23 @@ public class CmdLineParser {
                 .create('h');
         
         options.addOption("v", "verbose", false, "verbose program execution");
-        options.addOption("cwtsac", "use-cwtsac", false, "use Counting With Threshold And Simple Avg Comparision algorithm to compare bricks counting dimensions which fits "
-                + "within specified threshold (a + X*%(maxShrink - minShrink))");
-        options.addOption("cwteu", "use-cwteu", false, "use Counting With Threshold And Extended Uncertainty Factor algorithm to compare bricks counting dimensions which fits "
-                + "within specified threshold computer using expanded uncertainty");
+
+        options.addOption("cwtsac", "use-cwtsac", false, "BRICK COMPARATOR: use Counting With Threshold And Simple Avg "
+                + "Comparision algorithm to compare bricks counting dimensions which fits within specified threshold "
+                + "(a + X*%(maxShrink - minShrink))");
+
+        options.addOption("cwteu", "use-cwteu", false, "BRICK COMPARATOR: use Counting With Threshold And Extended "
+                + "Uncertainty Factor algorithm to compare bricks counting dimensions which fits within specified "
+                + "threshold computer using expanded uncertainty");
         
-        options.addOption("bpmwr", "use-bpmwr", false, "use Brick Pair Matching Without Return algorithm to compare bricks creating a best maching pairs of bricks. Bricks" +
-                " used in a particular pair is no longer considered to nex pair while comparing two certain walls");
-        options.addOption("asc", "use-ascc", false, "use Avg Similarities Counting algorithm to compare walls by averaging sum of brick counts "
-                + "- this is the only implemented algorithm for bricks");
+        options.addOption("bpmwr", "use-bpmwr", false, "WALL COMPARATOR: use Brick Pair Matching Without Return "
+                + "algorithm to compare bricks creating a *greedy best matching pairs* of bricks. It considers only"
+                + "bricks that are similar at 0.6(6) or grater similarity. Bricks used in a particular "
+                + "pair is no longer considered to next pair while comparing two certain walls");
+
+        options.addOption("asc", "use-ascc", false, "WALL COMPARATOR: use Avg Similarities Counting algorithm to compare "
+                + "walls by averaging sum of brick similarity. It creates all possible pairs of bricks among every wall "
+                + "and result the average of pairs similarity");
                 
         options.addOption(input);
         options.addOption(output);
@@ -183,40 +191,6 @@ public class CmdLineParser {
         return null;
     }
     
-    private int parsePositiveIntegerParameter(String parsedOptionValue, String invalidArgMsg) {
-        int parsedValue = -1;
-        try
-        {
-            parsedValue = Integer.valueOf(parsedOptionValue);
-            if(parsedValue < 0)
-            {
-                throw new NumberFormatException();
-            }
-        }
-        catch(NumberFormatException e)
-        {
-            System.err.println("'" + parsedOptionValue + "' " + invalidArgMsg
-                        + " " + e.getMessage());
-            System.exit(-1);
-        }
-        return parsedValue;
-    }
-    
-    private int parseIntegerParameter(String parsedOptionValue, String invalidArgMsg) {
-        int parsedValue = -1;
-        try
-        {
-            parsedValue = Integer.valueOf(parsedOptionValue);
-        }
-        catch(NumberFormatException e)
-        {
-            System.err.println("'" + parsedOptionValue + "' " + invalidArgMsg
-                        + " " + e.getMessage());
-            System.exit(-1);
-        }
-        return parsedValue;
-    }
-    
     private double parsePositiveDoubleParameter(String parsedOptionValue, String invalidArgMsg) {
         double parsedValue = -1;
         try
@@ -226,21 +200,6 @@ public class CmdLineParser {
             {
                 throw new NumberFormatException();
             }
-        }
-        catch(NumberFormatException e)
-        {
-            System.err.println("'" + parsedOptionValue + "' " + invalidArgMsg
-                        + " " + e.getMessage());
-            System.exit(-1);
-        }
-        return parsedValue;
-    }
-    
-    private double parseDoubleParameter(String parsedOptionValue, String invalidArgMsg) {
-        double parsedValue = -1;
-        try
-        {
-            parsedValue = Double.valueOf(parsedOptionValue);
         }
         catch(NumberFormatException e)
         {

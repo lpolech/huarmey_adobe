@@ -49,12 +49,12 @@ public class Parameters {
         return percentageMinBrickShrink;
     }
 
-    public static void setPercentageMinBrickShrink(
-            double percentageMinBrickShrink) {
+    public static void setPercentageMinBrickShrink(double percentageMinBrickShrink) {
         if(percentageMaxBrickShrink < percentageMinBrickShrink)
         {
-            System.err.println("Parameters.setPercentageMinBrickShrink(...) Setting MINIMUM value is GREATER than already saved MAXIMUM value."
-                    + " percentageMaxBrickShrink=" + percentageMaxBrickShrink + " percentageMinBrickShrink:" + percentageMinBrickShrink);
+            System.err.println("Parameters.setPercentageMinBrickShrink(...) Setting MINIMUM value is GREATER than "
+                    + "already saved MAXIMUM value. percentageMaxBrickShrink=" + percentageMaxBrickShrink
+                    + " percentageMinBrickShrink:" + percentageMinBrickShrink);
             System.exit(1);
         }
         Parameters.percentageMinBrickShrink = percentageMinBrickShrink;

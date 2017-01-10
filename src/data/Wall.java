@@ -42,7 +42,9 @@ public class Wall {
             {
                 if(!bricks.instance(i).stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE).equals(wallName))
                 {
-                    System.err.println("Wall::getWallName() there are bricks from more than one wall! Reference name: " + wallName + " and found additional wall: " + bricks.instance(i).stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE));
+                    System.err.println("Wall::getWallName() there are bricks from more than one wall! Reference name: "
+                            + wallName + " and found additional wall: "
+                            + bricks.instance(i).stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE));
                 }
             }
         }

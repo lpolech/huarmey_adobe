@@ -6,7 +6,7 @@ import algorithm.comparator.BrickComparator;
 import common.Globals;
 
 public class SumOfDifferences implements BrickComparator {
-//Problemz ta miara polega na tym, ze PROMUJE cegly, ktore maja mniej wymiarow niz wiecej..
+//Problem z ta miara polega na tym, ze PROMUJE cegly, ktore maja mniej wymiarow niz wiecej..
     @Override
     public double compare(Instance i1, Instance i2) {
         double sumOfDifferences = 0;

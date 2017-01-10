@@ -11,7 +11,7 @@ import common.Globals;
 import data.DistanceMatrix;
 
 public class BrickRanking extends AbstractRanking {
-    static public DistanceMatrix computeFullRanking(BrickComparator comparator, Instances bricks, String outputFile)
+    static public DistanceMatrix computeDistanceMatrix(BrickComparator comparator, Instances bricks, String outputFile)
     {
         DistanceMatrix dm = prepareDistanceMatrix(bricks);
         
@@ -19,9 +19,11 @@ public class BrickRanking extends AbstractRanking {
         {
             for(int j = 0; j < bricks.numInstances(); j++)
             {
-                dm.setElement(bricks.instance(i).stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE) + "_" + (int)bricks.instance(i).value(Globals.INDEX_OF_BRICK_NUMBER_ATTRIBUTE),
-                        bricks.instance(j).stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE) + "_" + (int)bricks.instance(j).value(Globals.INDEX_OF_BRICK_NUMBER_ATTRIBUTE), 
-                        comparator.compare(bricks.instance(i), bricks.instance(j)));
+                dm.setElement(bricks.instance(i).stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE) + "_"
+                                + (int)bricks.instance(i).value(Globals.INDEX_OF_BRICK_NUMBER_ATTRIBUTE),
+                              bricks.instance(j).stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE) + "_"
+                                + (int)bricks.instance(j).value(Globals.INDEX_OF_BRICK_NUMBER_ATTRIBUTE),
+                              comparator.compare(bricks.instance(i), bricks.instance(j)));
             }
         }
         
@@ -35,7 +37,8 @@ public class BrickRanking extends AbstractRanking {
         for(int i = 0; i < bricks.numInstances(); i++)
         {
             Instance brick = bricks.instance(i);
-            matrixHeader[i] = brick.stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE) + "_" + (int)brick.value(Globals.INDEX_OF_BRICK_NUMBER_ATTRIBUTE);
+            matrixHeader[i] = brick.stringValue(Globals.INDEX_OF_CLASS_ATTRIBUTE) + "_"
+                    + (int)brick.value(Globals.INDEX_OF_BRICK_NUMBER_ATTRIBUTE);
         }
         
         Arrays.sort(matrixHeader);

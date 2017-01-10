@@ -13,8 +13,7 @@ public class Loader {
             source = new DataSource(filePath);
             data = source.getDataSet();
         } catch (Exception e) {
-            System.err.println("Problem while loading " + filePath + " file.\n"
-                    + e);
+            System.err.println("Problem while loading " + filePath + " file.\n" + e);
             e.printStackTrace();
             System.exit(1);
         }
@@ -22,21 +21,8 @@ public class Loader {
 
         if (preprocessData)
             data = preprocess(data);
-
-        createWallObjects(data);
         
         return data;
-    }
-
-    private static void createWallObjects(Instances data) {
-        Attribute classAttribute = data.classAttribute();
-        if(!classAttribute.isNominal())
-        {
-            System.err.println("Loader.createWallObject : Class attribute should be of nominal type.");
-            System.exit(1);
-        }
-        
-        
     }
 
     static public Instances preprocess(Instances data) {

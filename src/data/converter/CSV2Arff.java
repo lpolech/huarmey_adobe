@@ -16,11 +16,11 @@ public class CSV2Arff {
      * takes 2 arguments: - CSV input file - ARFF output file
      */
     public static void main(String[] args) throws Exception {
-//      args = new String[]
-//              {
-//                  "dane_CSV.csv",
-//                  "dane_ARFF.arff"
-//              };
+        args = new String[]
+                {
+                    "adobe-data-30_10.csv",
+                    "adobe-data-30_10.arff"
+                };
         if (args.length != 2) {
             System.out.println("\nUsage: CSV2Arff <input.csv> <output.arff>\n");
             System.exit(1);

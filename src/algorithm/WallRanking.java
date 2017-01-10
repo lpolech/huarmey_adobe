@@ -1,7 +1,9 @@
 package algorithm;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
+import data.WallDistanceMatrix;
 import weka.core.Instances;
 import algorithm.comparator.WallComparator;
 import data.DistanceMatrix;
@@ -11,7 +13,7 @@ public class WallRanking extends AbstractRanking {
     static public DistanceMatrix computeFullRanking(WallComparator comparator, DistanceMatrix bricksDM, Instances bricks, String outputFile)
     {
         Wall walls[] = createWalls(bricks);
-        DistanceMatrix dm = prepareDistanceMatrix(walls);
+        WallDistanceMatrix dm = prepareDistanceMatrix(walls);
         
         for(int i = 0; i < walls.length; i++)
         {
@@ -43,15 +45,17 @@ public class WallRanking extends AbstractRanking {
         return walls;
     }
     
-    static private DistanceMatrix prepareDistanceMatrix(Wall[] walls)
+    static private WallDistanceMatrix prepareDistanceMatrix(Wall[] walls)
     {
         String[] matrixHeader = new String[walls.length];
+        HashMap<String, Integer> wallWithNumberOfBricks = new HashMap<>(walls.length);
         for(int i = 0; i < walls.length; i++)
         {
             matrixHeader[i] = walls[i].getWallName();
+            wallWithNumberOfBricks.put(matrixHeader[i], walls[i].getBricks().numInstances());
         }
         
         Arrays.sort(matrixHeader);
-        return new DistanceMatrix(walls.length, matrixHeader);
+        return new WallDistanceMatrix(walls.length, matrixHeader, wallWithNumberOfBricks);
     }
 }

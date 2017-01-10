@@ -10,7 +10,7 @@ import common.Globals;
 public class DistanceMatrix {
     private String[] matrixElements;
     private double[][] distanceMatrix;
-    private int numberOfElements;
+    protected int numberOfElements;
     
     public DistanceMatrix(int numberOfElements, String[] matrixElements)
     {
@@ -26,16 +26,8 @@ public class DistanceMatrix {
         Arrays.sort(matrixElements);
     }
     
-    private int findElementNumber(String elementName)
+    protected int findElementNumber(String elementName)
     {
-//      for(int i = 0; i < numberOfElements; i++)
-//      {
-//          if(matrixElements[i].equals(elementName))
-//          {
-//              return i;
-//          }
-//      }
-//      return -666;
         return Arrays.binarySearch(matrixElements, elementName);
     }
     
@@ -107,9 +99,5 @@ public class DistanceMatrix {
 
     public String[] getMatrixElements() {
         return matrixElements;
-    }
-
-    public int getNumberOfBricks() {
-        return numberOfElements;
     }
 }
