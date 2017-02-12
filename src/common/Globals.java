@@ -63,4 +63,9 @@ public class Globals {
         return true;
         
     }
+
+    public static boolean isDoubleExtremelyNearZero(double number)
+    {
+        return Math.abs(number) <= 0.0000000001;
+    }
 }

@@ -50,4 +50,14 @@ public class Wall {
         }
         return wallName;
     }
+
+    public void delete(String brickName) {
+        String brickNumber = brickName.split("_")[1];
+        for(int i = 0; i < bricks.numInstances(); i++) {
+            if(brickNumber.equals(bricks.instance(i).stringValue(Globals.INDEX_OF_BRICK_NUMBER_ATTRIBUTE))) {
+                bricks.delete(i);
+                return;
+            }
+        }
+    }
 }

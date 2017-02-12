@@ -93,10 +93,23 @@ public class CmdLineParser {
                 + "bricks that are similar at 0.6(6) or grater similarity. Bricks used in a particular "
                 + "pair is no longer considered to next pair while comparing two certain walls");
 
-        options.addOption("asc", "use-ascc", false, "WALL COMPARATOR: use Avg Similarities Counting algorithm to compare "
+        options.addOption("asc", "use-asc", false, "WALL COMPARATOR: use Avg Similarities Counting algorithm to compare "
                 + "walls by averaging sum of brick similarity. It creates all possible pairs of bricks among every wall "
                 + "and result the average of pairs similarity");
-                
+
+        options.addOption("mnn", "use-mnn", false, "WALL COMPARATOR: use Mutual Nearest Neighbours to compare "
+                + "walls by matching mutual NN among two walls. After finding them, the bricks are removed. If after "
+                + "finding all mutual NN there are bricks left, then heuristic is employed to match bricks with the "
+                + "highest similarities. The result is averaged by the number of pairs.");
+
+        options.addOption("libmnn", "use-libmnn", false, "WALL COMPARATOR: use Mutual Nearest Neighbours with Least Involved "
+                + "Brick (LIB) which is a heuristics that helps in choosing brick mutual neighbours by utilising bricks "
+                + "that are involved in the minimum number of mutual neighbourhoods. This heuristics should help in having "
+                + "more mutual neighbourhoods among walls. Besides the heuristic, the algorithm compare walls by matching "
+                + "mutual NN among two walls. After finding them, the bricks are removed. If after finding all mutual NN "
+                + "there are bricks left, then heuristic is employed to match bricks with the highest similarities. The "
+                + "result is averaged by the number of created pairs.");
+
         options.addOption(input);
         options.addOption(output);
         options.addOption(accuracy);
@@ -186,6 +199,13 @@ public class CmdLineParser {
         {
             return EWallComparators.BEST_PAIR_MATCHING;
         }
+        else if(cmd.hasOption("mnn")) {
+            return EWallComparators.MUTUAL_NEAREST_NEIGHBOUR;
+        }
+        else if(cmd.hasOption("libmnn")) {
+            return EWallComparators.LEAST_INVOLVED_BRICK_MUTUAL_NEAREST_NEIGHBOUR;
+        }
+
         System.err.println("No wall comparision method was set!");
         System.exit(1);
         return null;

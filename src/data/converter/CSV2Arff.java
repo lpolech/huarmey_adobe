@@ -18,8 +18,8 @@ public class CSV2Arff {
     public static void main(String[] args) throws Exception {
         args = new String[]
                 {
-                    "adobe-data-30_10.csv",
-                    "adobe-data-30_10.arff"
+                    "adobe-data-27_02_17.csv",
+                    "adobe-data-27_02_17.arff"
                 };
         if (args.length != 2) {
             System.out.println("\nUsage: CSV2Arff <input.csv> <output.arff>\n");

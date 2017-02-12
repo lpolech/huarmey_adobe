@@ -2,6 +2,8 @@ package runner;
 
 import java.io.File;
 
+import algorithm.comparator.wall.LeastInvolvedBrickMutualNearestNeighbour;
+import algorithm.comparator.wall.MutualNearestNeighbor;
 import common.CmdLineParser;
 import weka.core.Instances;
 import algorithm.BrickRanking;
@@ -38,12 +40,17 @@ public class CommandLineRun {
         //mozna na podstawie distance matrix wykorzystac jakies metody klasteryzacji
         args = new String[]{
                 "-i",
-                "adobe-data-07_01.arff",
+//                "proba.arff",
+                "adobe-data-27_02_17.arff",
+//                "noMNN.arff",
+//                "poprawka_adobe-data-07_01.arff",
                 "-o",
-                "adobe-data-07_01_avg_similarities_counting_a1",
+                "adobe-data-27_02_17_mutual_nearest_neighbour_a1",
                 "-cwtsac",
 //              "-bpmwr",
-                "-asc",
+//                "-asc",
+//                "-mnn",
+                "-libmnn",
                 "-v",
                 "-a",
                 "1.0",
@@ -105,6 +112,15 @@ public class CommandLineRun {
         {
             wallComparator = new BrickPairMatchingWithoutReturn();
         }
+        else if(Parameters.getWallComparator() == EWallComparators.MUTUAL_NEAREST_NEIGHBOUR)
+        {
+            wallComparator = new MutualNearestNeighbor();
+        }
+        else if(Parameters.getWallComparator() == EWallComparators.LEAST_INVOLVED_BRICK_MUTUAL_NEAREST_NEIGHBOUR)
+        {
+            wallComparator = new LeastInvolvedBrickMutualNearestNeighbour(false);
+        }
+
         DistanceMatrix wallsRanking = WallRanking.computeFullRanking(wallComparator, bricksRanking, bricks,
                 Parameters.getOutputFolder() + File.separator + "wallRanking.csv");
         
